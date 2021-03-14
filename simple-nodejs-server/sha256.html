@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<head>
+    <title>My Website</title>
+    <style>
+        *,
+        html {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background-color: rgb(116, 46, 222);
+        }
+
+        .center {
+            width: 100%;
+            height: 50%;
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: 'Trebuchet MS', Helvetica, sans-serif;
+            text-align: center;
+        }
+
+        hl {
+            font-size: 144px;
+        }
+
+        p {
+            font-size: 64px;
+        }
+    </style>
+</head>
+
+<body>    
+    <div class='center'>
+        <h1>SHA256</h1>
+    <h4></br></h4>
+
+    <form id='myForm'>
+        <label for=''>Send some data: </label>
+        <input id='value' name='value' value='' required>
+        <input type='submit' value='submit'>
+    </form>
+    <h1></br></h1>
+
+    <h1>Here is your token: </br></br></h1>
+    <h2><div id='result'></div></h2>
+
+    <script> 
+    window.addEventListener('load', function () {
+    function sendData() {
+        const XHR = new XMLHttpRequest();
+        // Bind the FormData object and the form element
+        const formData = new FormData(form);
+        var value = formData.get('value');
+        // Define what happens on successful data submission
+        XHR.addEventListener('load', function(event) {
+            document.getElementById('result').innerHTML = event.target.responseText;
+        } );
+        // Define what happens in case of error
+        XHR.addEventListener('error', function( event ) {
+            alert('Oops! Something went wrong.');
+        } );
+        // Set up our request
+        var queryStr = 'sha256';
+        if (value)
+            queryStr += '?value=' + encodeURIComponent(value);  
+        XHR.open('GET', queryStr, true);
+        // The data sent is what the user provided in the form
+        XHR.send();
+    }
+    // Access the form element...
+    const form = document.getElementById('myForm');
+    // ...and take over its submit event.
+    form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            sendData();
+        });
+    });
+    </script>
+    </div>
+</body>
+
+</html>
