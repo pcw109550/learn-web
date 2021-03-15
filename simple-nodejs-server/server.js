@@ -1,18 +1,17 @@
-import * as http from 'http';
-import * as fs from 'fs';
-import { createHash, randomBytes } from 'crypto';
+const http = require('http');
+const fs = require('fs');
+const crypto = require('crypto');
 
-const __dirname = process.cwd();
 const host = 'localhost';
 const port = 8000;
-const SALT = randomBytes(6).toString('hex');
+const SALT = crypto.randomBytes(6).toString('hex');
 
 function parseGetParams(query) {
     if (!query)
         return;
-    var result = {};
+    let result = {};
     query.split('&').forEach(function(part) {
-        var item = part.split('=');
+        let item = part.split('=');
         result[item[0]] = decodeURIComponent(item[1]);
     });
     return result;
@@ -32,12 +31,12 @@ function display (res, filename) {
 }
 
 function genHashWithSalt(value) {
-    return createHash('sha256').update(SALT + value).digest('hex');
+    return crypto.createHash('sha256').update(SALT + value).digest('hex');
 }
 
 function requestListener (req, res) {
     console.log(req.url);
-    var url = req.url.split('?');
+    let url = req.url.split('?');
     switch (url[0]) {
         case '/json':
             res.setHeader('Content-Type', 'application/json');
@@ -47,7 +46,7 @@ function requestListener (req, res) {
             res.end('msg');
             break;
         case '/sha256':
-            var getParams = parseGetParams(url[1]);
+            let getParams = parseGetParams(url[1]);
             if (getParams)
                 res.end(genHashWithSalt(getParams['value']));
             else

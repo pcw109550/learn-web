@@ -66,7 +66,7 @@
             const XHR = new XMLHttpRequest();
             // Bind the FormData object and the form element
             const formData = new FormData(currentForm);
-            var value = formData.get('value');
+            let value = formData.get('value');
             // Define what happens on successful data submission
             XHR.addEventListener('load', function(event) {
                 document.getElementById('result').innerHTML = event.target.responseText;
@@ -76,7 +76,7 @@
                 alert('Oops! Something went wrong.');
             } );
             // Set up our request
-            var queryStr = 'sha256';
+            let queryStr = 'sha256';
             if (value)
                 queryStr += '?value=' + encodeURIComponent(value);
             XHR.open('GET', queryStr, true);
