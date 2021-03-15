@@ -1,0 +1,21 @@
+doctype html
+head
+  title My Website
+  style 
+    include ../css/style.css
+.center
+  h1 SHA256
+  h4
+    br
+  form#myForm
+    label(for='') Send some data: 
+    input#value(name='value' value='' required='')
+    =' '
+    input(type='submit' value='submit')
+  h1
+    br
+  h1
+    | Here is your token: 
+    br
+    br
+  h1 #{hashvalue}

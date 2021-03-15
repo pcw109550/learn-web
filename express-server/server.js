@@ -1,65 +1,45 @@
-const http = require('http');
-const fs = require('fs');
 const crypto = require('crypto');
+const express = require('express');
+const { allowedNodeEnvironmentFlags } = require('process');
 
 const host = 'localhost';
 const port = 8000;
 const SALT = crypto.randomBytes(6).toString('hex');
+const jsonData = { 'server_secret': `${SALT}`}
 
-function parseGetParams(query) {
-    if (!query)
-        return;
-    let result = {};
-    query.split('&').forEach(function(part) {
-        let item = part.split('=');
-        result[item[0]] = decodeURIComponent(item[1]);
-    });
-    return result;
-}  
+const app = express();
+app.set('views', './views');
+app.set('view engine', 'pug');
 
-function display (res, filename) {
-    fs.readFile(__dirname + filename, (err, data) => {
-        if (err) {
-            res.writeHead(500);
-            res.end(`Could not read index.html file: ${err}`);
-        } else {
-            res.setHeader('Content-Type', 'text/html');
-            res.writeHead(200);
-            res.end(data);
-        }
-    });
-}
+app.get('/', (req, res) => {
+    res.render('index');
+});
+
+app.get('/json', (req, res) => {
+    res.json(jsonData);
+});
+
+app.get('/msg', (req, res) => {
+    res.send('msg');
+});
+
+app.get('/sha256', (req, res) => {
+    const details = {
+        hashvalue: (req.query.value ? genHashWithSalt(SALT + req.query.value) : ''),
+    }
+    res.render('sha256', details);
+});
+
+app.get('*', (req, res, next) => {
+    res.status(404).send('Sorry, page not found');
+    next();
+});
+
+app.listen(port, host, () => {
+    console.log(`[Express] Server is running on http://${host}:${port}`);
+    console.log(`Server secret key: ${SALT}`);
+});
 
 function genHashWithSalt(value) {
     return crypto.createHash('sha256').update(SALT + value).digest('hex');
 }
-
-function requestListener (req, res) {
-    console.log(req.url);
-    let url = req.url.split('?');
-    switch (url[0]) {
-        case '/json':
-            res.setHeader('Content-Type', 'application/json');
-            res.end(`{"server-secret": "${SALT}"}`);
-            break;
-        case '/msg':
-            res.end('msg');
-            break;
-        case '/sha256':
-            let getParams = parseGetParams(url[1]);
-            if (getParams)
-                res.end(genHashWithSalt(getParams['value']));
-            else
-                display(res, '/sha256.html'); 
-            break;
-        default:
-            display(res, '/index.html'); 
-            break;
-    };
-};
-
-const server = http.createServer(requestListener);
-server.listen(port, host, () => {
-    console.log(`Server is running on http://${host}:${port}`);
-    console.log(`Server secret key: ${SALT}`);
-});
