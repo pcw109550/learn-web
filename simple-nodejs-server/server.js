@@ -48,9 +48,9 @@ function requestListener (req, res) {
             break;
         case '/sha256':
             var getParams = parseGetParams(url[1]);
-            if (getParams) {
+            if (getParams)
                 res.end(genHashWithSalt(getParams['value']));
-            } else
+            else
                 display(res, '/sha256.html'); 
             break;
         default:
