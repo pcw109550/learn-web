@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<head>
+    <title>My Website</title>
+</head>
+
+<body>    
+    <div class='center'>
+        <h1>Hello!</h1>
+        <p>Server UP!</p>
+        <h1 id='current_time'>
+            <br/> <script> document.write(new Date()); </script>
+        </h1>
+        <h1><br/></h1>
+        <button onclick="window.location='/msg.html'">msg</button>
+        <button onclick="window.location='/json.html'">json</button>
+        <button onclick="window.location='/sha256.html'">sha256</button>
+        <button onclick="window.location='/call.html'">call</button>
+        <script>
+            function updateTime() {
+                let d = new Date();
+                document.getElementById('current_time').innerHTML = '<br/>' + d; 
+            }
+            setInterval(updateTime, 1000);
+        </script>
+    </div>
+</body>
+
+</html>
