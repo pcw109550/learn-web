@@ -5,9 +5,6 @@ module.exports = {
   mode: 'development',
   entry: {
     index: ['./src/index.js'],
-    msg: ['./src/msg.js'],
-    sha256: ['./src/sha256.js'],
-    json: ['./src/json.js'],
     call: ['./src/call.js']
   },
   devtool: 'inline-source-map',
@@ -22,21 +19,6 @@ module.exports = {
       filename: 'index.html',
       template: 'views/index.html',
       chunks: ['index']
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'msg.html',
-      template: 'views/msg.html',
-      chunks: ['msg']
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'sha256.html',
-      template: 'views/sha256.html',
-      chunks: ['sha256']
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'json.html',
-      template: 'views/json.html',
-      chunks: ['json']
     }),
     new HtmlWebpackPlugin({
       filename: 'call.html',
@@ -54,7 +36,7 @@ module.exports = {
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
-      },
+      }
     ],
   },
 };
